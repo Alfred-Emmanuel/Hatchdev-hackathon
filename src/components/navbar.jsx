@@ -63,9 +63,9 @@ const Navbar = () => {
         <div>
         <a
           href="#"
-          className="hover:bg-pink-600 text-blue px-4 py-3 w-[154px] h-[42px] rounded-full"
+          className=" text-black px-4 py-3 w-[154px] h-[42px]"
         >
-          Login/Register
+          Login/ Register
         </a>
         </div>
         
