@@ -1,6 +1,6 @@
 import React from 'react'
-import {createStorefrontApiClient} from '@shopify/storefront-api-client';
-import { SHOPIFY_DOMAIN, STOREFRONT_ACCESS_TOKEN } from '../config';
+import { db } from '../firebase';
+import { collection, doc, setDoc, addDoc, getDoc, getDocs } from "firebase/firestore";
 import Cloth from "../assets/cloth.png"
 import Cloth2 from "../assets/fixed-height.png"
 import Cloth3 from "../assets/fixed-height (2).png"
@@ -47,6 +47,51 @@ function ProductList() {
 
 // fetchShopData();
 
+async function addBrand(brandData) {
+  try {
+    const brandRef = await addDoc(collection(db, "brands"), brandData);
+    console.log("Brand added with ID: ", brandRef.id);
+    return brandRef;
+  } catch (error) {
+    console.error("Error adding brand: ", error);
+  }
+}
+
+async function addProductToBrand(brandId, productData) {
+  try {
+    const productRef = await addDoc(collection(db, "brands", brandId, "products"), productData);
+    console.log("Product added with ID: ", productRef.id);
+    return productRef;
+  } catch (error) {
+    console.error("Error adding product: ", error);
+  }
+}
+
+const brandData = {
+  name: "ExampleBrand",
+  description: "This is an example brand",
+  logo: "https://example.com/logo.png",
+  website: "https://example.com",
+  createdAt: new Date().toISOString()
+};
+
+const productData = {
+  name: "Example Product",
+  price: 99.99,
+  description: "This is an example product",
+  image: "url.com"
+};
+
+async function example() {
+  const brandRef = await addBrand(brandData);
+  if (brandRef) {
+    await addProductToBrand(brandRef.id, productData);
+    const products = await getProductsOfBrand(brandRef.id);
+    console.log("Products of the brand: ", products);
+  }
+}
+
+// example();
 
 
   const items = [

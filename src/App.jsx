@@ -4,6 +4,8 @@ import Home from './pages/Home';
 import ProductList from './pages/ProductList';
 import Products from './pages/Products';
 import Brands from './pages/Brands';
+import SignUp from './pages/SignUp';
+import SignIn from './pages/SignIn';
 
 function App() {
   
@@ -14,6 +16,8 @@ function App() {
         <Route path="/brands" element={<Brands />} />
         <Route path="/product_list" element={<ProductList />} />
         <Route path="/products" element={<Products />} />
+        <Route path="/sign_in" element={<SignIn />} />
+        <Route path="/register" element={<SignUp />} />
       </Routes>
     </Router>
   );
