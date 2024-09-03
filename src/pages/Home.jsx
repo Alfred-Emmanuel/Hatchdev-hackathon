@@ -3,10 +3,10 @@ import Navbar from "../components/navbar";
 import img from "../assets/hero-cover-1.png";
 import wins from "../assets/icon cool-icon-153.svg";
 import conc from "../assets/icon cool-icon-1153.svg";
-import over from "../assets/uil_arrow-grow.png";
+// import over from "../assets/uil_arrow-grow.png";
 import BrandLogo from "../components/brands-logo";
 import FeaturedProduct from "../components/featured-comp";
-import col from "../assets/col-md-6(1).png";
+// import col from "../assets/col-md-6(1).png";
 
 function Home() {
   return (
@@ -31,7 +31,7 @@ function Home() {
       <BrandLogo className="" />
 
       <div className="mt-19 flex items-center w-[1050px] h-[498px] col-span-2 justify-center">
-        <img src={col} />
+        {/* <img src={col} /> */}
         <div className="w-[447px] h-[246px] ">
           <p className="text-violet-700 text-2xl">Featured Products</p>
           <p>We love what we do</p>
@@ -64,7 +64,7 @@ function Home() {
             details="Overcame any hurdle or any other problem."
           />
           <FeaturedProduct
-            img={over}
+            // img={over}
             title="Concrete"
             details="Defalcate is most focused in helping you discover your most beautiful smile"
           />

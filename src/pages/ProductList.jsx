@@ -1,4 +1,6 @@
 import React from 'react'
+import {createStorefrontApiClient} from '@shopify/storefront-api-client';
+import { SHOPIFY_DOMAIN, STOREFRONT_ACCESS_TOKEN } from '../config';
 import Cloth from "../assets/cloth.png"
 import Cloth2 from "../assets/fixed-height.png"
 import Cloth3 from "../assets/fixed-height (2).png"
@@ -14,6 +16,39 @@ import Footer from '../components/Footer'
 import Navbar from '../components/navbar'
 
 function ProductList() {
+//   const client = createStorefrontApiClient({
+//     storeDomain: SHOPIFY_DOMAIN,
+//     apiVersion: '2023-10',
+//     publicAccessToken: STOREFRONT_ACCESS_TOKEN,
+//   });
+
+//   const shopQuery = `
+//   query shop {
+//     shop {
+//       name
+//       id
+//     }
+//   }
+// `;
+// async function fetchShopData() {
+//   try {
+//     const response = await client.fetch(shopQuery);
+
+//     if (response.ok) {
+//       const { errors, data, extensions } = await response.json();
+//       console.log(data)
+//     } else {
+//       console.error("Error fetching data", response.statusText);
+//     }
+//   } catch (error) {
+//     console.error("Error occurred during fetch", error);
+//   }
+// }
+
+// fetchShopData();
+
+
+
   const items = [
     { id: 1, src: Cloth, title: 'Graphic Design', department: 'English Dept', price: '$16.53' },
     { id: 2, src: Cloth2, title: 'Graphic Design', department: 'English Dept', price: '$16.53' },
