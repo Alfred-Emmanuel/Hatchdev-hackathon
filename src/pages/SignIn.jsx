@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import { auth } from '../firebase'
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import useAuthDetails from '../custom-hooks/useAuthDetails';
+import { Link } from 'react-router-dom';
 
 function SignIn() {
     const { authUser, userSignOut } = useAuthDetails();
@@ -27,6 +28,9 @@ function SignIn() {
                 <input type='password' placeholder='Enter your password' value={password} onChange={(e) => setPassword(e.target.value)} />
                 <button type='submit'>Sign In</button>
             </form>
+
+            <p>Don't have an account? <Link to="/register">Sign Up</Link></p>
+
             <div>
                 {
                     authUser ? 

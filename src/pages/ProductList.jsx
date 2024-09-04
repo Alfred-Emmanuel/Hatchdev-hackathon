@@ -1,6 +1,7 @@
 import React from 'react'
 import { db } from '../firebase';
-import { collection, doc, setDoc, addDoc, getDoc, getDocs } from "firebase/firestore";
+import { collection, doc, query, where, getDocs, writeBatch } from "firebase/firestore";
+import useProductDetails from '../custom-hooks/useProductDetails';
 import Cloth from "../assets/cloth.png"
 import Cloth2 from "../assets/fixed-height.png"
 import Cloth3 from "../assets/fixed-height (2).png"
@@ -16,96 +17,163 @@ import Footer from '../components/Footer'
 import Navbar from '../components/navbar'
 
 function ProductList() {
-//   const client = createStorefrontApiClient({
-//     storeDomain: SHOPIFY_DOMAIN,
-//     apiVersion: '2023-10',
-//     publicAccessToken: STOREFRONT_ACCESS_TOKEN,
-//   });
 
-//   const shopQuery = `
-//   query shop {
-//     shop {
-//       name
-//       id
-//     }
-//   }
-// `;
-// async function fetchShopData() {
+// async function addBrand(brandData) {
 //   try {
-//     const response = await client.fetch(shopQuery);
-
-//     if (response.ok) {
-//       const { errors, data, extensions } = await response.json();
-//       console.log(data)
-//     } else {
-//       console.error("Error fetching data", response.statusText);
-//     }
+//     const brandRef = await addDoc(collection(db, "brands"), brandData);
+//     console.log("Brand added with ID: ", brandRef.id);
+//     return brandRef;
 //   } catch (error) {
-//     console.error("Error occurred during fetch", error);
+//     console.error("Error adding brand: ", error);
 //   }
 // }
 
-// fetchShopData();
-
-async function addBrand(brandData) {
+const { products } = useProductDetails("Abercrombie and fitch");
+async function getProductsOfBrand(brandId) {
   try {
-    const brandRef = await addDoc(collection(db, "brands"), brandData);
-    console.log("Brand added with ID: ", brandRef.id);
-    return brandRef;
+    const productsCollection = collection(db, "brands", brandId, "products");
+    const productsSnapshot = await getDocs(productsCollection);
+    const productsList = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return productsList;
   } catch (error) {
-    console.error("Error adding brand: ", error);
-  }
-}
-
-async function addProductToBrand(brandId, productData) {
-  try {
-    const productRef = await addDoc(collection(db, "brands", brandId, "products"), productData);
-    console.log("Product added with ID: ", productRef.id);
-    return productRef;
-  } catch (error) {
-    console.error("Error adding product: ", error);
+    console.error("Error getting products: ", error);
   }
 }
 
 const brandData = {
-  name: "ExampleBrand",
-  description: "This is an example brand",
-  logo: "https://example.com/logo.png",
-  website: "https://example.com",
+  name: "Abercrombie and fitch",
+  description: "Abercrombie & Fitch Co. (A&F) is an American lifestyle retailer that focuses on contemporary clothing",
+  // logo: "https://example.com/logo.png",
+  // website: "https://example.com",
   createdAt: new Date().toISOString()
 };
 
-const productData = {
-  name: "Example Product",
-  price: 99.99,
-  description: "This is an example product",
-  image: "url.com"
-};
+const productsData = [
+  {
+    name: "Classic Leather Jacket",
+    price: 120.00,
+    description: "A timeless leather jacket that adds an edge to any outfit.",
+    image: "https://example.com/classic-leather-jacket.jpg",
+    isEcofriendly: false,
+    style: "Outerwear"
+  },
+  {
+    name: "Silk Scarf",
+    price: 35.99,
+    description: "Luxurious silk scarf perfect for all seasons.",
+    image: "https://example.com/silk-scarf.jpg",
+    isEcofriendly: true,
+    style: "Accessories"
+  },
+  {
+    name: "Vintage Denim Jeans",
+    price: 75.50,
+    description: "Classic straight-leg denim jeans with a vintage wash.",
+    image: "https://example.com/vintage-denim-jeans.jpg",
+    isEcofriendly: true,
+    style: "Bottoms"
+  },
+  {
+    name: "Cashmere Sweater",
+    price: 150.00,
+    description: "Soft and warm cashmere sweater in a versatile color.",
+    image: "https://example.com/cashmere-sweater.jpg",
+    isEcofriendly: false,
+    style: "Knitwear"
+  },
+  {
+    name: "Maxi Dress",
+    price: 89.99,
+    description: "Flowy and elegant maxi dress for any occasion.",
+    image: "https://example.com/maxi-dress.jpg",
+    isEcofriendly: true,
+    style: "Dresses"
+  },
+  {
+    name: "Suede Boots",
+    price: 95.00,
+    description: "Stylish suede boots with a comfortable heel.",
+    image: "https://example.com/suede-boots.jpg",
+    isEcofriendly: false,
+    style: "Footwear"
+  },
+  {
+    name: "Wool Peacoat",
+    price: 130.00,
+    description: "Double-breasted wool peacoat with a classic fit.",
+    image: "https://example.com/wool-peacoat.jpg",
+    isEcofriendly: true,
+    style: "Outerwear"
+  },
+  {
+    name: "Graphic Tee",
+    price: 25.00,
+    description: "Casual graphic tee with a bold print.",
+    image: "https://example.com/graphic-tee.jpg",
+    isEcofriendly: false,
+    style: "Tops"
+  },
+  {
+    name: "Plaid Skirt",
+    price: 45.50,
+    description: "Chic plaid skirt with a modern twist.",
+    image: "https://example.com/plaid-skirt.jpg",
+    isEcofriendly: true,
+    style: "Bottoms"
+  },
+  {
+    name: "Leather Handbag",
+    price: 120.00,
+    description: "Elegant leather handbag with multiple compartments.",
+    image: "https://example.com/leather-handbag.jpg",
+    isEcofriendly: false,
+    style: "Accessories"
+  }
+];
 
-async function example() {
-  const brandRef = await addBrand(brandData);
-  if (brandRef) {
-    await addProductToBrand(brandRef.id, productData);
-    const products = await getProductsOfBrand(brandRef.id);
-    console.log("Products of the brand: ", products);
+async function addProductsToBrand(brandId, products) {
+  try {
+    const batch = writeBatch(db);
+
+    products.forEach((product) => {
+      const productRef = doc(collection(db, "brands", brandId, "products"));
+      batch.set(productRef, product);
+    });
+
+    await batch.commit();
+    console.log("All products added successfully");
+  } catch (error) {
+    console.error("Error adding products: ", error);
   }
 }
 
-// example();
+async function addProductsToExistingBrand(brandName, productsData) {
+  try {
+    const brandsCollection = collection(db, "brands");
+    const brandQuery = query(brandsCollection, where("name", "==", brandName));
+    const brandSnapshot = await getDocs(brandQuery);
 
+    if (brandSnapshot.empty) {
+      console.log(`No brand found with the name: ${brandName}`);
+      return;
+    }
 
-  const items = [
-    { id: 1, src: Cloth, title: 'Graphic Design', department: 'English Dept', price: '$16.53' },
-    { id: 2, src: Cloth2, title: 'Graphic Design', department: 'English Dept', price: '$16.53' },
-    { id: 3, src: Cloth3, title: 'Graphic Design', department: 'English Dept', price: '$16.53' },
-    { id: 4, src: Cloth4, title: 'Graphic Design', department: 'English Dept', price: '$16.53' },
-    { id: 5, src: Cloth5, title: 'Graphic Design', department: 'English Dept', price: '$16.53' },
-    { id: 6, src: Cloth6, title: 'Graphic Design', department: 'English Dept', price: '$16.53' },
-    { id: 7, src: Cloth7, title: 'Graphic Design', department: 'English Dept', price: '$16.53' },
-    { id: 8, src: Cloth8, title: 'Graphic Design', department: 'English Dept', price: '$16.53' },
-    { id: 9, src: Cloth9, title: 'Graphic Design', department: 'English Dept', price: '$16.53' },
-    { id: 10, src: Cloth10, title: 'Graphic Design', department: 'English Dept', price: '$16.53' },
-  ];
+    const brandDoc = brandSnapshot.docs[0];
+    const brandId = brandDoc.id;
+
+    await addProductsToBrand(brandId, productsData);
+    const products = await getProductsOfBrand(brandId);
+    console.log("Products of the brand: ", products);
+
+  } catch (error) {
+    console.error("Error adding products to existing brand: ", error);
+  }
+}
+
+const brandName = "Abercrombie and fitch";
+// addProductsToExistingBrand(brandName, productsData);
+
+console.log(products)
 
   
   return (
@@ -113,12 +181,12 @@ async function example() {
       <Navbar />
       <div className='w-full flex flex-col justify-center items-center pt-10 mt-20'>
         <div className="grid grid-cols-4 gap-4 w-[70%] justify-center items-center">
-          {items.map((item) => (
-            <div key={item.id} className="flex flex-col items-center gap-2 ">
-              <img src={item.src} className="h-44" alt={item.title} />
-              <h1 className="text-sm font-semibold">{item.title}</h1>
-              <p className="text-slate-600 font-semibold text-xs">{item.department}</p>
-              <p className="text-slate-400 font-medium text-xs">{item.price}</p>
+          {products.map((product) => (
+            <div key={product.id} className="flex flex-col products-center gap-2 ">
+              <img src={product.image} className="h-44" alt={product.name} />
+              <h1 className="text-sm font-semibold">{product.name}</h1>
+              <p className="text-slate-600 font-semibold text-xs">{product.department}</p>
+              <p className="text-slate-400 font-medium text-xs">{product.price}</p>
             </div>
           ))}
         </div>
@@ -136,7 +204,7 @@ async function example() {
             </div>
         </div>
         <BrandLogo />
-        <div className='w-[70%] flex justify-between items-center h-20 border-b border-slate-300 pr-5'>
+        <div className='w-[70%] flex justify-between items-center h-20 pr-5'>
           <h1 className=' text-sm font-bold'>Bandage </h1>
           <div className='flex gap-3'>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-4 text-blue-500">

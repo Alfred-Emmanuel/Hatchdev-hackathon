@@ -6,6 +6,7 @@ import over from "../assets/uil_arrow-growth.png";
 import BrandLogo from "../components/brands-logo";
 import FeaturedProduct from "../components/featured-comp";
 import col from "../assets/col-md-6 (1).png";
+import Footer from "../components/Footer";
 
 function Home() {
   return (
@@ -76,6 +77,7 @@ function Home() {
           />
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
