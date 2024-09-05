@@ -44,7 +44,7 @@ const Navbar = () => {
                 {/* Right Side - Request Demo and Icons */}
                 <div className={`flex items-center space-x-4 ${isMobileMenuOpen ? 'hidden' : 'lg:flex'}`}>
                     <a
-                        href="#"
+                        href="/register"
                         className="text-black px-4 py-1 w-[154px] h-[42px] bg-white rounded"
                     >
                         Login/ Register

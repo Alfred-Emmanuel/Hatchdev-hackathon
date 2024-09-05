@@ -71,7 +71,7 @@ function Home() {
             details="Overcame any hurdle or any other problem."
           />
           <FeaturedProduct
-            // img={over}
+            img={over}
             title="Concrete"
             details="Defalcate is most focused in helping you discover your most beautiful smile"
           />
