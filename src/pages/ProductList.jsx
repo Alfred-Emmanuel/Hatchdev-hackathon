@@ -1,17 +1,10 @@
-import React from 'react'
+import React, {useState, useEffect } from 'react'
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import { db } from '../firebase';
 import { collection, doc, query, where, getDocs, writeBatch } from "firebase/firestore";
 import useProductDetails from '../custom-hooks/useProductDetails';
-import Cloth from "../assets/cloth.png"
-import Cloth2 from "../assets/fixed-height.png"
-import Cloth3 from "../assets/fixed-height (2).png"
-import Cloth10 from "../assets/fixed-height (1).png"
-import Cloth4 from "../assets/fixed-height (3).png"
-import Cloth5 from "../assets/fixed-height (4).png"
-import Cloth6 from "../assets/fixed-height (5).png"
-import Cloth7 from "../assets/product-cover-5.png"
-import Cloth8 from "../assets/product-cover-5 (1).png"
-import Cloth9 from "../assets/product-cover-5 (2).png"
+import Pagination from '../components/Pagination';
 import BrandLogo from '../components/brands-logo';
 import Footer from '../components/Footer'
 import Navbar from '../components/navbar'
@@ -27,8 +20,15 @@ function ProductList() {
 //     console.error("Error adding brand: ", error);
 //   }
 // }
-
+const [loading, setLoading] = useState(true);
 const { products } = useProductDetails("Abercrombie and fitch");
+
+useEffect(() => {
+  if (products.length > 0) {
+    setLoading(false);
+  }
+}, [products]);
+
 async function getProductsOfBrand(brandId) {
   try {
     const productsCollection = collection(db, "brands", brandId, "products");
@@ -49,87 +49,87 @@ const brandData = {
 };
 
 const productsData = [
-  {
-    name: "Classic Leather Jacket",
-    price: 120.00,
-    description: "A timeless leather jacket that adds an edge to any outfit.",
-    image: "https://example.com/classic-leather-jacket.jpg",
-    isEcofriendly: false,
-    style: "Outerwear"
-  },
-  {
-    name: "Silk Scarf",
-    price: 35.99,
-    description: "Luxurious silk scarf perfect for all seasons.",
-    image: "https://example.com/silk-scarf.jpg",
-    isEcofriendly: true,
-    style: "Accessories"
-  },
-  {
-    name: "Vintage Denim Jeans",
-    price: 75.50,
-    description: "Classic straight-leg denim jeans with a vintage wash.",
-    image: "https://example.com/vintage-denim-jeans.jpg",
-    isEcofriendly: true,
-    style: "Bottoms"
-  },
-  {
-    name: "Cashmere Sweater",
-    price: 150.00,
-    description: "Soft and warm cashmere sweater in a versatile color.",
-    image: "https://example.com/cashmere-sweater.jpg",
-    isEcofriendly: false,
-    style: "Knitwear"
-  },
-  {
-    name: "Maxi Dress",
-    price: 89.99,
-    description: "Flowy and elegant maxi dress for any occasion.",
-    image: "https://example.com/maxi-dress.jpg",
-    isEcofriendly: true,
-    style: "Dresses"
-  },
-  {
-    name: "Suede Boots",
-    price: 95.00,
-    description: "Stylish suede boots with a comfortable heel.",
-    image: "https://example.com/suede-boots.jpg",
-    isEcofriendly: false,
-    style: "Footwear"
-  },
-  {
-    name: "Wool Peacoat",
-    price: 130.00,
-    description: "Double-breasted wool peacoat with a classic fit.",
-    image: "https://example.com/wool-peacoat.jpg",
-    isEcofriendly: true,
-    style: "Outerwear"
-  },
-  {
-    name: "Graphic Tee",
-    price: 25.00,
-    description: "Casual graphic tee with a bold print.",
-    image: "https://example.com/graphic-tee.jpg",
-    isEcofriendly: false,
-    style: "Tops"
-  },
-  {
-    name: "Plaid Skirt",
-    price: 45.50,
-    description: "Chic plaid skirt with a modern twist.",
-    image: "https://example.com/plaid-skirt.jpg",
-    isEcofriendly: true,
-    style: "Bottoms"
-  },
-  {
-    name: "Leather Handbag",
-    price: 120.00,
-    description: "Elegant leather handbag with multiple compartments.",
-    image: "https://example.com/leather-handbag.jpg",
-    isEcofriendly: false,
-    style: "Accessories"
-  }
-];
+    {
+      name: "Classic Leather Jacket",
+      price: 120.00,
+      description: "A timeless leather jacket that adds an edge to any outfit.",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9F8F7xnPNcDqM1kTFN-uSEGEK_I-yu798BA&s",
+      isEcofriendly: false,
+      style: "Outerwear"
+    },
+    {
+      name: "Silk Scarf",
+      price: 35.99,
+      description: "Luxurious silk scarf perfect for all seasons.",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKjXQjVI8-a9mV6WKWfD3lNr2QA-9OkmrYvQ&s",
+      isEcofriendly: true,
+      style: "Accessories"
+    },
+    {
+      name: "Vintage Denim Jeans",
+      price: 75.50,
+      description: "Classic straight-leg denim jeans with a vintage wash.",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUMuyjY383QjlnQ-XyeGckKcSxBvFVgHYYyw&s",
+      isEcofriendly: true,
+      style: "Bottoms"
+    },
+    {
+      name: "Cashmere Sweater",
+      price: 150.00,
+      description: "Soft and warm cashmere sweater in a versatile color.",
+      image: "https://www.gearpatrol.com/wp-content/uploads/sites/2/2023/02/best-cashmere-sweaters-refresh-lead-1668555002-jpg.webp",
+      isEcofriendly: false,
+      style: "Knitwear"
+    },
+    {
+      name: "Maxi Dress",
+      price: 89.99,
+      description: "Flowy and elegant maxi dress for any occasion.",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQL9h47hseTAyo-mJ9x6edZprI1XRm-VZs_Bg&s",
+      isEcofriendly: true,
+      style: "Dresses"
+    },
+    {
+      name: "Suede Boots",
+      price: 95.00,
+      description: "Stylish suede boots with a comfortable heel.",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJcbYDmNqFSdo3e2gU3zQ5y5HYmBdLDJcl_g&s",
+      isEcofriendly: false,
+      style: "Footwear"
+    },
+    {
+      name: "Wool Peacoat",
+      price: 130.00,
+      description: "Double-breasted wool peacoat with a classic fit.",
+      image: "https://cdn1.purificaciongarcia.com/wcscontent/photos/PG/2024/42/PH/42PH407500241/42PH407500241_06_1x1.jpg",
+      isEcofriendly: true,
+      style: "Outerwear"
+    },
+    {
+      name: "Graphic Tee",
+      price: 25.00,
+      description: "Casual graphic tee with a bold print.",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjnof35_-ujDount4XClhPo0gT7xoki2I-Ng&s",
+      isEcofriendly: false,
+      style: "Tops"
+    },
+    {
+      name: "Plaid Skirt",
+      price: 45.50,
+      description: "Chic plaid skirt with a modern twist.",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzHw49ZREnIsQ8ddCkiQORIcUXEvk9FJm2Jg&s",
+      isEcofriendly: true,
+      style: "Bottoms"
+    },
+    {
+      name: "Leather Handbag",
+      price: 120.00,
+      description: "Elegant leather handbag with multiple compartments.",
+      image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=869&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      isEcofriendly: false,
+      style: "Accessories"
+    }
+  ];
 
 async function addProductsToBrand(brandId, products) {
   try {
@@ -173,39 +173,78 @@ async function addProductsToExistingBrand(brandName, productsData) {
 const brandName = "Abercrombie and fitch";
 // addProductsToExistingBrand(brandName, productsData);
 
-console.log(products)
+const [currentPage, setCurrentPage] = useState(1);
+const productsPerPage = 12;
+
+const totalPages = Math.ceil(products.length / productsPerPage);
+
+const indexOfLastProduct = currentPage * productsPerPage;
+const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+const goToNextPage = () => {
+  if (currentPage < totalPages) {
+    scrollToTop();
+    setCurrentPage((prev) => prev + 1);
+  }
+};
+
+const goToPreviousPage = () => {
+  if (currentPage > 1) {
+    scrollToTop();
+    setCurrentPage((prev) => prev - 1);
+  }
+};
+
+const goToFirstPage = () => {
+  scrollToTop();
+  setCurrentPage(1);
+};
+
+const goToPage = (pageNumber) => {
+  scrollToTop();
+  setCurrentPage(pageNumber);
+};
 
   
   return (
     <main>
       <Navbar />
       <div className='w-full flex flex-col justify-center items-center pt-10 mt-20'>
-        <div className="grid grid-cols-4 gap-4 w-[70%] justify-center items-center">
-          {products.map((product) => (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 w-[90%] md:w-[75%] justify-center items-center">
+          {loading
+          ? Array.from({ length: 8 }).map((_, index) => ( 
+              <div key={index} className="flex flex-col items-center gap-2">
+                <Skeleton height={176} width={176} />
+                <Skeleton width={100} />
+                <Skeleton width={80} />
+                <Skeleton width={120} />
+              </div>
+            ))
+          : currentProducts.map((product) => (
             <div key={product.id} className="flex flex-col products-center gap-2 ">
-              <img src={product.image} className="h-44" alt={product.name} />
+              <img src={product.image} className="h-52 rounded-md shadow-md" alt={product.name} />
               <h1 className="text-sm font-semibold">{product.name}</h1>
-              <p className="text-slate-600 font-semibold text-xs">{product.department}</p>
-              <p className="text-slate-400 font-medium text-xs">{product.price}</p>
+              {/* <p className="text-slate-600 font-semibold text-xs">{product.department}</p> */}
+              <p className="text-slate-400 font-medium text-xs">${product.price}</p>
             </div>
           ))}
         </div>
-        <div className='border-2 rounded-md w-[20%] flex items-center h-10 cursor-pointer my-10 px-3'>
-            <div className='w-1/3 flex jusitfy-center'>
-              <h1 className='text-gray-400'>First</h1>
-            </div>
-            <div className='flex w-1/2 items-center justify-center gap-3 h-full border-x-2 px-2'>
-              <h1 className='h-full flex items-center px-3'>1</h1>
-              <h1 className='h-full bg-[#23A6F0] flex items-center px-3 text-white'>2</h1>
-              <h1 className='h-full flex items-center px-3'>3</h1>
-            </div>
-            <div className='w-1/3 flex justify-center text-[#23A6F0]'>
-              <h1>Next</h1>
-            </div>
-        </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          goToNextPage={goToNextPage}
+          goToPreviousPage={goToPreviousPage}
+          goToFirstPage={goToFirstPage}
+          goToPage={goToPage}
+        />
         <BrandLogo />
-        <div className='w-[70%] flex justify-between items-center h-20 pr-5'>
-          <h1 className=' text-sm font-bold'>Bandage </h1>
+        <div className='w-[90%] md:w-[70%] flex justify-between items-center h-20 pr-5'>
+          <h1 className=' font-bold'>Bandage </h1>
           <div className='flex gap-3'>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-4 text-blue-500">
               <path fillRule="evenodd" d="M5.25 2.25a3 3 0 0 0-3 3v4.318a3 3 0 0 0 .879 2.121l9.58 9.581c.92.92 2.39 1.186 3.548.428a18.849 18.849 0 0 0 5.441-5.44c.758-1.16.492-2.629-.428-3.548l-9.58-9.581a3 3 0 0 0-2.122-.879H5.25ZM6.375 7.5a1.125 1.125 0 1 0 0-2.25 1.125 1.125 0 0 0 0 2.25Z" clipRule="evenodd" />

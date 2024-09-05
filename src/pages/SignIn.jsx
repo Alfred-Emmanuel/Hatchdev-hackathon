@@ -7,10 +7,15 @@ import Footer from "../components/Footer";
 import loginBg from "../assets/Login Page.png";
 import fashion from "../assets/Fashion 2.png";
 import { Link } from 'react-router-dom';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
+
 
 function SignIn() {
   const { authUser, userSignOut } = useAuthDetails();
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -20,15 +25,32 @@ function SignIn() {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
-        console.log(userCredentials);
+        toast.success("Sign in successful!");
+        
+        setTimeout(() => {
+          navigate("/product_list");
+        }, 1500);
+        // console.log(userCredentials);
       })
       .catch((error) => {
-        console.log(error);
+        if (error.code === 'auth/invalid-credential') {
+          toast.error("Incorrect password or email. Please try again.");
+        } else if (error.code === 'auth/network-request-failed') {
+          toast.error("Network error. Please check your connection and try again.");
+        }  else if (error.code === 'auth/user-not-found') {
+          toast.error("No user found with this email. Please sign up.");
+        }  
+        else {
+          toast.error("An error occurred. Please try again.");
+        }
+        // console.log(error);
       });
   };
+  
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   return (
     <div
       className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center"
@@ -112,7 +134,7 @@ function SignIn() {
           </div>
         )}
       </div>
-
+      <ToastContainer />
       <Footer />
     </div>
   );
