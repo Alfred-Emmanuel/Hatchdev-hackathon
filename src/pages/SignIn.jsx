@@ -94,8 +94,7 @@ function SignIn() {
             </button>
             <p className="text-center mt-6 text-xl">
               New to Bandage?{" "}
-              <Link to="/register" className="text-blue-800 font-bold">Sign Up</Link>
-              
+              <Link to="/register" className="text-blue-800 font-bold"> Create an account </Link>
             </p>
           </form>
         </div>
