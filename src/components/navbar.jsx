@@ -1,67 +1,98 @@
-import { useState } from 'react';
-import { FaChevronDown } from "react-icons/fa";
-import { BsSearch, BsCart, BsList } from 'react-icons/bs';
-// import useAuth from '../custom-hooks/useAuthDetails';
+import { useState, useEffect } from 'react';
+import { BsList } from 'react-icons/bs';
+import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from '../context/AuthContext'; // Use the AuthContext
+import { AnimatePresence, motion } from "framer-motion";
+
+// Active className function
+const activeClassName = "text-blue-950 font-bold";
+const activeStyleCallback = ({ isActive }) => (isActive ? activeClassName : "hover:text-gray-400");
+
+// Separate NavLinks Component with Auth Handling and Brands Dropdown
+const NavLinks = ({ authUser, userSignOut }) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  return (
+    <>
+      <NavLink to="/about" className={activeStyleCallback}>About</NavLink>
+      <NavLink to="/blog" className={activeStyleCallback}>Blog</NavLink>
+      <NavLink to="/contact" className={activeStyleCallback}>Contact</NavLink>
+      <NavLink to="/pages" className={activeStyleCallback}>Pages</NavLink>
+      <div className="relative">
+        <button
+          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          className="flex items-center"
+        >
+          Brands
+        </button>
+        {isDropdownOpen && (
+          <div className="absolute bg-white text-blue-950 p-2 mt-2 rounded shadow-lg">
+            <NavLink to="/brands/option1" className="block px-4 py-2 hover:bg-gray-100 rounded">Option 1</NavLink>
+            <NavLink to="/brands/option2" className="block px-4 py-2 hover:bg-gray-100 rounded">Option 2</NavLink>
+            <NavLink to="/brands/option3" className="block px-4 py-2 hover:bg-gray-100 rounded">Option 3</NavLink>
+          </div>
+        )}
+      </div>
+      {authUser ? (
+        <button className="text-black" onClick={userSignOut}>Logout</button>
+      ) : (
+        <NavLink to="/register" className="px-4 py-1 text-blue-950 rounded">Login/Register</NavLink>
+      )}
+    </>
+  );
+};
 
 const Navbar = () => {
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const { authUser, userSignOut } = useAuth();
-    // console.log (authUser)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { authUser, userSignOut } = useAuth();
+  const location = useLocation();
 
-    return (
-        <nav className="mb-11 w-full absolute top-0 left-0 text-white py-4 bg-transparent">
-            <div className="container mx-auto flex justify-between items-center px-4 lg:px-60">
-                <div className="text-2xl font-700 text-blue-950">Bandage.</div>
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
-                <div className="flex flex-col lg:flex-row lg:space-x-8 lg:items-center w-full lg:w-auto text-blue-950">
-                    <div className={`flex flex-col lg:flex-row lg:space-x-8 lg:items-center ${isMobileMenuOpen ? 'block' : 'hidden lg:flex'}`}>
-                        <a href="#" className="hover:text-gray-400">Home</a>
-                        <div onClick={() => setIsDropdownOpen(!isDropdownOpen)} className="relative flex items-center">
-                            <span>Brands</span>
-                            {isDropdownOpen && (
-                                <div className="absolute bg-gray-800 p-2 mt-2 rounded shadow-lg">
-                                    <a href="#" className="block px-4 py-2 hover:bg-gray-700 rounded">Option 1</a>
-                                    <a href="#" className="block px-4 py-2 hover:bg-gray-700 rounded">Option 2</a>
-                                    <a href="#" className="block px-4 py-2 hover:bg-gray-700 rounded">Option 3</a>
-                                </div>
-                            )}
-                        </div>
-                        <a href="#" className="hover:text-gray-400">About</a>
-                        <a href="#" className="hover:text-gray-400">Blog</a>
-                        <a href="#" className="hover:text-gray-400">Contact</a>
-                        <a href="#" className="hover:text-gray-400">Pages</a>
-                        <a href="#" className= "px-4 py-1 w-full text-center text-blue-950 lg:hidden">Login/ Register</a>
-                    </div>
+  // Close the mobile menu on navigation
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location.pathname]);
 
-                   
-                </div>
+  return (
+    <nav className={`w-full relative top-0 left-0 text-white py-4 bg-transparent ${isMobileMenuOpen ? 'mb-40' : 'mb-8'}`}> {/* Changed to relative positioning */}
+      <div className="container mx-auto flex justify-between items-center px-4 lg:px-60">
+        {/* Logo */}
+        <div className="text-2xl font-700 text-blue-950">Bandage.</div>
 
-                <div className={`flex items-center space-x-4 ${isMobileMenuOpen ? 'hidden' : 'lg:flex'}`}>
-                    {
-                        authUser ? (
-                            <button className='text-black' onClick={userSignOut}>Logout</button>
-                        ) : 
-                        (
-                            <a
-                                href="/register"
-                                className="text-black px-4 py-1 w-[154px] h-[42px] bg-white rounded"
-                            >
-                                Login/ Register
-                            </a>
-                        )
-                    }
-                </div>
-                 <button
-                        className="lg:hidden text-xl ml-auto text-black"
-                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                    >
-                        <BsList />
-                    </button>
+        {/* Mobile Menu Button */}
+        <button
+          className="lg:hidden text-xl text-black"
+          onClick={toggleMobileMenu}
+        >
+          <BsList />
+        </button>
+
+        {/* Desktop Links */}
+        <div className="hidden lg:flex items-center space-x-8 text-blue-950">
+          <NavLinks authUser={authUser} userSignOut={userSignOut} />
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ height: 0 }}
+            animate={{ height: 'auto' }}
+            exit={{ height: 0 }}
+            className="lg:hidden bg-white text-blue-950 w-full absolute top-full left-0 z-50 flex flex-col items-center justify-center" // Ensured proper alignment
+          >
+            <div className="flex flex-col items-center space-y-2 p-4">
+              <NavLinks authUser={authUser} userSignOut={userSignOut} />
             </div>
-        </nav>
-    );
-}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </nav>
+  );
+};
 
 export default Navbar;

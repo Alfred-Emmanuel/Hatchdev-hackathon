@@ -12,7 +12,7 @@ function Home() {
   return (
     <div className="font-montserrat justify-center items-center h-full">
       <Navbar />
-      <div className="pt-20 mx-auto px-4 lg:px-0 w-full lg:w-[1292px] flex flex-col lg:flex-row rounded-xl bg-custom-gradient mt-20 h-auto lg:h-[619px] justify-center items-center">
+      <div className="pt-20 mx-auto px-4 lg:px-0 w-full lg:w-[1292px] flex flex-col lg:flex-row rounded-xl bg-custom-gradient mt-20  h-auto lg:h-[619px] justify-center items-center">
         <div className="my-auto text-center lg:text-left px-4 lg:px-0">
           <p>SUMMER 2024</p>
           <p className="mt-4 mb-4 text-violet-900 font-700 text-3xl">
@@ -35,7 +35,7 @@ function Home() {
 
       <div className="mt-9 mb-8 mx-auto gap-4 flex flex-col lg:flex-row items-center w-full lg:w-[1050px] h-auto lg:h-[498px] justify-center">
         <img src={col} className="w-full lg:w-auto h-auto" alt="Column Image" />
-        <div className="ml-0 lg:ml-8 w-full lg:w-[447px] h-auto">
+        <div className="ml-0 lg:ml-8 w-full lg:w-[447px] h-auto pl-5">
           <p className="text-gray-700 text-2xl font-700">Featured Products</p>
           <h2 className="text-dark-900 mt-3 font-700 text-3xl mb-3">
             We love what we do
