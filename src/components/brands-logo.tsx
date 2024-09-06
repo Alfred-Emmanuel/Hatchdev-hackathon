@@ -3,8 +3,8 @@ import logo from '../assets/container.png'
 
 const BrandLogo = () => {
   return (
-    <div>
-        <img src={logo} className='mx-auto items-center justify-center mt-9 w-[1260px] h-[175px]'/>
+    <div className='w-full'>
+        <img src={logo} className='mx-auto w-[90%] md:w-[78%] md:h-[150px]'/>
     </div>
   )
 }

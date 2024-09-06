@@ -1,20 +1,20 @@
 import { useState } from 'react';
 import { FaChevronDown } from "react-icons/fa";
 import { BsSearch, BsCart, BsList } from 'react-icons/bs';
-import useAuthDetails from '../custom-hooks/useAuthDetails';
+// import useAuth from '../custom-hooks/useAuthDetails';
+import { useAuth } from '../context/AuthContext'; // Use the AuthContext
 
 const Navbar = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const { authUser, userSignOut } = useAuthDetails();
-    console.log (authUser)
+    const { authUser, userSignOut } = useAuth();
+    // console.log (authUser)
 
     return (
         <nav className="mb-11 w-full absolute top-0 left-0 text-white py-4 bg-transparent">
             <div className="container mx-auto flex justify-between items-center px-4 lg:px-60">
                 <div className="text-2xl font-700 text-blue-950">Bandage.</div>
 
-                {/* Center - Navigation Links */}
                 <div className="flex flex-col lg:flex-row lg:space-x-8 lg:items-center w-full lg:w-auto text-blue-950">
                     <div className={`flex flex-col lg:flex-row lg:space-x-8 lg:items-center ${isMobileMenuOpen ? 'block' : 'hidden lg:flex'}`}>
                         <a href="#" className="hover:text-gray-400">Home</a>
@@ -38,7 +38,6 @@ const Navbar = () => {
                    
                 </div>
 
-                {/* Right Side - Request Demo and Icons */}
                 <div className={`flex items-center space-x-4 ${isMobileMenuOpen ? 'hidden' : 'lg:flex'}`}>
                     {
                         authUser ? (
@@ -54,7 +53,6 @@ const Navbar = () => {
                         )
                     }
                 </div>
-                 {/* Mobile Menu Button */}
                  <button
                         className="lg:hidden text-xl ml-auto text-black"
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}

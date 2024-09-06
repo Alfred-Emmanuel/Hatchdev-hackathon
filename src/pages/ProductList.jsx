@@ -2,7 +2,7 @@ import React, {useState, useEffect } from 'react'
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { db } from '../firebase';
-import { collection, doc, query, where, getDocs, writeBatch } from "firebase/firestore";
+import { collection, doc, query, where, getDocs, writeBatch, addDoc } from "firebase/firestore";
 import useProductDetails from '../custom-hooks/useProductDetails';
 import Pagination from '../components/Pagination';
 import BrandLogo from '../components/brands-logo';
@@ -11,15 +11,16 @@ import Navbar from '../components/navbar'
 
 function ProductList() {
 
-// async function addBrand(brandData) {
-//   try {
-//     const brandRef = await addDoc(collection(db, "brands"), brandData);
-//     console.log("Brand added with ID: ", brandRef.id);
-//     return brandRef;
-//   } catch (error) {
-//     console.error("Error adding brand: ", error);
-//   }
-// }
+async function addBrand(brandData) {
+  try {
+    const brandRef = await addDoc(collection(db, "brands"), brandData);
+    console.log("Brand added with ID: ", brandRef.id);
+    return brandRef;
+  } catch (error) {
+    console.error("Error adding brand: ", error);
+  }
+}
+
 const [loading, setLoading] = useState(true);
 const { products } = useProductDetails("Abercrombie and fitch");
 
@@ -29,148 +30,68 @@ useEffect(() => {
   }
 }, [products]);
 
-async function getProductsOfBrand(brandId) {
-  try {
-    const productsCollection = collection(db, "brands", brandId, "products");
-    const productsSnapshot = await getDocs(productsCollection);
-    const productsList = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    return productsList;
-  } catch (error) {
-    console.error("Error getting products: ", error);
-  }
-}
+// async function getProductsOfBrand(brandId) {
+//   try {
+//     const productsCollection = collection(db, "brands", brandId, "products");
+//     const productsSnapshot = await getDocs(productsCollection);
+//     const productsList = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+//     return productsList;
+//   } catch (error) {
+//     console.error("Error getting products: ", error);
+//   }
+// }
 
-const brandData = {
-  name: "Abercrombie and fitch",
-  description: "Abercrombie & Fitch Co. (A&F) is an American lifestyle retailer that focuses on contemporary clothing",
-  // logo: "https://example.com/logo.png",
-  // website: "https://example.com",
-  createdAt: new Date().toISOString()
-};
+// const brandData = {
+//   name: "Gucci",
+//   description: "Guccio Gucci S.p.A., doing business as Gucci is an Italian luxury fashion house based in Florence, Italy.",
+//   // logo: "https://example.com/logo.png",
+//   // website: "https://example.com",
+//   createdAt: new Date().toISOString()
+// };
 
-const productsData = [
-    {
-      name: "Classic Leather Jacket",
-      price: 120.00,
-      description: "A timeless leather jacket that adds an edge to any outfit.",
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9F8F7xnPNcDqM1kTFN-uSEGEK_I-yu798BA&s",
-      isEcofriendly: false,
-      style: "Outerwear"
-    },
-    {
-      name: "Silk Scarf",
-      price: 35.99,
-      description: "Luxurious silk scarf perfect for all seasons.",
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKjXQjVI8-a9mV6WKWfD3lNr2QA-9OkmrYvQ&s",
-      isEcofriendly: true,
-      style: "Accessories"
-    },
-    {
-      name: "Vintage Denim Jeans",
-      price: 75.50,
-      description: "Classic straight-leg denim jeans with a vintage wash.",
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUMuyjY383QjlnQ-XyeGckKcSxBvFVgHYYyw&s",
-      isEcofriendly: true,
-      style: "Bottoms"
-    },
-    {
-      name: "Cashmere Sweater",
-      price: 150.00,
-      description: "Soft and warm cashmere sweater in a versatile color.",
-      image: "https://www.gearpatrol.com/wp-content/uploads/sites/2/2023/02/best-cashmere-sweaters-refresh-lead-1668555002-jpg.webp",
-      isEcofriendly: false,
-      style: "Knitwear"
-    },
-    {
-      name: "Maxi Dress",
-      price: 89.99,
-      description: "Flowy and elegant maxi dress for any occasion.",
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQL9h47hseTAyo-mJ9x6edZprI1XRm-VZs_Bg&s",
-      isEcofriendly: true,
-      style: "Dresses"
-    },
-    {
-      name: "Suede Boots",
-      price: 95.00,
-      description: "Stylish suede boots with a comfortable heel.",
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJcbYDmNqFSdo3e2gU3zQ5y5HYmBdLDJcl_g&s",
-      isEcofriendly: false,
-      style: "Footwear"
-    },
-    {
-      name: "Wool Peacoat",
-      price: 130.00,
-      description: "Double-breasted wool peacoat with a classic fit.",
-      image: "https://cdn1.purificaciongarcia.com/wcscontent/photos/PG/2024/42/PH/42PH407500241/42PH407500241_06_1x1.jpg",
-      isEcofriendly: true,
-      style: "Outerwear"
-    },
-    {
-      name: "Graphic Tee",
-      price: 25.00,
-      description: "Casual graphic tee with a bold print.",
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjnof35_-ujDount4XClhPo0gT7xoki2I-Ng&s",
-      isEcofriendly: false,
-      style: "Tops"
-    },
-    {
-      name: "Plaid Skirt",
-      price: 45.50,
-      description: "Chic plaid skirt with a modern twist.",
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzHw49ZREnIsQ8ddCkiQORIcUXEvk9FJm2Jg&s",
-      isEcofriendly: true,
-      style: "Bottoms"
-    },
-    {
-      name: "Leather Handbag",
-      price: 120.00,
-      description: "Elegant leather handbag with multiple compartments.",
-      image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=869&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      isEcofriendly: false,
-      style: "Accessories"
-    }
-  ];
+// addBrand(brandData)
 
-async function addProductsToBrand(brandId, products) {
-  try {
-    const batch = writeBatch(db);
 
-    products.forEach((product) => {
-      const productRef = doc(collection(db, "brands", brandId, "products"));
-      batch.set(productRef, product);
-    });
+// async function addProductsToBrand(brandId, products) {
+//   try {
+//     const batch = writeBatch(db);
 
-    await batch.commit();
-    console.log("All products added successfully");
-  } catch (error) {
-    console.error("Error adding products: ", error);
-  }
-}
+//     products.forEach((product) => {
+//       const productRef = doc(collection(db, "brands", brandId, "products"));
+//       batch.set(productRef, product);
+//     });
 
-async function addProductsToExistingBrand(brandName, productsData) {
-  try {
-    const brandsCollection = collection(db, "brands");
-    const brandQuery = query(brandsCollection, where("name", "==", brandName));
-    const brandSnapshot = await getDocs(brandQuery);
+//     await batch.commit();
+//     console.log("All products added successfully");
+//   } catch (error) {
+//     console.error("Error adding products: ", error);
+//   }
+// }
 
-    if (brandSnapshot.empty) {
-      console.log(`No brand found with the name: ${brandName}`);
-      return;
-    }
+// async function addProductsToExistingBrand(brandName, productsData) {
+//   try {
+//     const brandsCollection = collection(db, "brands");
+//     const brandQuery = query(brandsCollection, where("name", "==", brandName));
+//     const brandSnapshot = await getDocs(brandQuery);
 
-    const brandDoc = brandSnapshot.docs[0];
-    const brandId = brandDoc.id;
+//     if (brandSnapshot.empty) {
+//       console.log(`No brand found with the name: ${brandName}`);
+//       return;
+//     }
 
-    await addProductsToBrand(brandId, productsData);
-    const products = await getProductsOfBrand(brandId);
-    console.log("Products of the brand: ", products);
+//     const brandDoc = brandSnapshot.docs[0];
+//     const brandId = brandDoc.id;
 
-  } catch (error) {
-    console.error("Error adding products to existing brand: ", error);
-  }
-}
+//     await addProductsToBrand(brandId, productsData);
+//     const products = await getProductsOfBrand(brandId);
+//     console.log("Products of the brand: ", products);
 
-const brandName = "Abercrombie and fitch";
+//   } catch (error) {
+//     console.error("Error adding products to existing brand: ", error);
+//   }
+// }
+
+// const brandName = "Versace";
 // addProductsToExistingBrand(brandName, productsData);
 
 const [currentPage, setCurrentPage] = useState(1);

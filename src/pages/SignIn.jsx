@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { auth } from "../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import useAuthDetails from "../custom-hooks/useAuthDetails";
+import { useAuth } from '../context/AuthContext';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Footer from "../components/Footer";
 import loginBg from "../assets/Login Page.png";
@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 
 
 function SignIn() {
-  const { authUser, userSignOut } = useAuthDetails();
+  const { authUser, userSignOut } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
@@ -50,6 +50,8 @@ function SignIn() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  console.log(authUser)
+
 
   return (
     <div
