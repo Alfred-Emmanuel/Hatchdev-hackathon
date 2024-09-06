@@ -124,7 +124,7 @@ function SignIn() {
         </div>
       </div>
 
-      <div>
+      {/* <div>
         {authUser ? (
           <div>
             <p> Signed In </p>
@@ -135,7 +135,7 @@ function SignIn() {
             <p>Signed Out</p>
           </div>
         )}
-      </div>
+      </div> */}
       <ToastContainer />
       <Footer />
     </div>

@@ -115,7 +115,7 @@ const goToPage = (pageNumber) => {
   return (
     <main>
       <Navbar />
-      <div className='w-full flex flex-col justify-center items-center pt-10 mt-20'>
+      <div className='w-full flex flex-col justify-center items-center md:pt-10'>
         <div className='w-[90%] md:w-[72%] flex items-center justify-between'>
           <div className="w-[30%] mx-auto my-4">
             <label htmlFor="brand-select" className="block text-sm font-medium text-gray-700">

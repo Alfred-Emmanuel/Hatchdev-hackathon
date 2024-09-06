@@ -17,14 +17,14 @@ const Modal = ({ product, closeModal }) => {
           ✕
         </button>
         <div className="flex flex-col mt-4">
-            <div className='flex items-center justify-between'>
+            <div className='flex flex-col md:flex-row items-center justify-between'>
                 <img src={product.image} alt={product.name} className="h-52 w-52 rounded-md shadow-md" />
-                <div className='w-[60%]'>
-                    <div className='flex items-center mt-5  gap-20'>
+                <div className='w-[65%] md:w-[60%]'>
+                    <div className='flex flex-col gap-2 md:flex-row md:items-center mt-5 md:gap-20'>
                         <h1 className="text-xl font-semibold">{product.name}</h1>
                         <p className="text-slate-500 text-sm ">${product.price}</p>
                     </div>
-                    <div className='flex  mt-2 gap-3'>
+                    <div className='flex flex-col md:flex-row mt-2 md:gap-3'>
                         <p className='text-sm font-medium'>Description: </p>
                         <p className="text-slate-400 text-sm ">{product.description}</p>
                     </div>

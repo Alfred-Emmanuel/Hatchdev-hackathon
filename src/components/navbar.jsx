@@ -4,21 +4,18 @@ import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from '../context/AuthContext'; // Use the AuthContext
 import { AnimatePresence, motion } from "framer-motion";
 
-// Active className function
 const activeClassName = "text-blue-950 font-bold";
 const activeStyleCallback = ({ isActive }) => (isActive ? activeClassName : "hover:text-gray-400");
 
-// Separate NavLinks Component with Auth Handling and Brands Dropdown
 const NavLinks = ({ authUser, userSignOut }) => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
     <>
-      <NavLink to="/about" className={activeStyleCallback}>About</NavLink>
-      <NavLink to="/blog" className={activeStyleCallback}>Blog</NavLink>
-      <NavLink to="/contact" className={activeStyleCallback}>Contact</NavLink>
-      <NavLink to="/pages" className={activeStyleCallback}>Pages</NavLink>
-      <div className="relative">
+      {/* <NavLink to="/about" className={activeStyleCallback}>About</NavLink> */}
+      {/* <NavLink to="/blog" className={activeStyleCallback}>Blog</NavLink>
+      <NavLink to="/contact" className={activeStyleCallback}>Contact</NavLink> */}
+      <NavLink to="/product_list" className={activeStyleCallback}>Brands</NavLink>
+      {/* <div className="relative">
         <button
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           className="flex items-center"
@@ -32,11 +29,14 @@ const NavLinks = ({ authUser, userSignOut }) => {
             <NavLink to="/brands/option3" className="block px-4 py-2 hover:bg-gray-100 rounded">Option 3</NavLink>
           </div>
         )}
-      </div>
+      </div> */}
       {authUser ? (
-        <button className="text-black" onClick={userSignOut}>Logout</button>
+        <button className="text-black hover:text-red-600 font-medium" onClick={userSignOut}>Logout</button>
       ) : (
-        <NavLink to="/register" className="px-4 py-1 text-blue-950 rounded">Login/Register</NavLink>
+        <div className=''>        
+          <NavLink to="/sign_in" className="px-4 py-1 text-blue-950 rounded">Login</NavLink>
+          <NavLink to="/register" className="px-4 py-1 text-blue-950 rounded">Register</NavLink>
+        </div>
       )}
     </>
   );
@@ -51,18 +51,15 @@ const Navbar = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  // Close the mobile menu on navigation
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
 
   return (
-    <nav className={`w-full relative top-0 left-0 text-white py-4 bg-transparent ${isMobileMenuOpen ? 'mb-40' : 'mb-8'}`}> {/* Changed to relative positioning */}
+    <nav className={`w-full relative top-0 left-0 text-white py-4 bg-transparent ${isMobileMenuOpen ? 'mb-10' : 'mb-4'}`}> {/* Changed to relative positioning */}
       <div className="container mx-auto flex justify-between items-center px-4 lg:px-60">
-        {/* Logo */}
         <div className="text-2xl font-700 text-blue-950">Bandage.</div>
 
-        {/* Mobile Menu Button */}
         <button
           className="lg:hidden text-xl text-black"
           onClick={toggleMobileMenu}
