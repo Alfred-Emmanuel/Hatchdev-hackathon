@@ -10,9 +10,9 @@ import Footer from "../components/Footer";
 
 function Home() {
   return (
-    <div className="font-montserrat justify-center items-center h-full">
+    <div className="font-montserrat justify-center items-center h-full px-5">
       <Navbar />
-      <div className="pt-20 mx-auto px-4 lg:px-0 w-full lg:w-[1292px] flex flex-col lg:flex-row rounded-xl bg-custom-gradient mt-20  h-auto lg:h-[619px] justify-center items-center">
+      <div className="pt-20 mx-auto px-4 lg:px-0 w-full lg:w-[1292px] flex flex-col lg:flex-row rounded-xl bg-custom-gradient  h-auto lg:h-[619px] justify-center items-center">
         <div className="my-auto text-center lg:text-left px-4 lg:px-0">
           <p>SUMMER 2024</p>
           <p className="mt-4 mb-4 text-violet-900 font-700 text-3xl">

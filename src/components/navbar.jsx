@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { BsList } from 'react-icons/bs';
 import { NavLink, useLocation } from "react-router-dom";
-import { useAuth } from '../context/AuthContext'; // Use the AuthContext
+import { useAuth } from '../context/AuthContext';
 import { AnimatePresence, motion } from "framer-motion";
 
 const activeClassName = "text-blue-950 font-bold";
