@@ -1,16 +1,20 @@
-import React, { useState } from "react";
-import { auth } from "../firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { useAuth } from '../context/AuthContext';
+import React, { useEffect, useState } from "react";
+import { auth, provider } from "../firebase";
+import {
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  fetchSignInMethodsForEmail,
+} from "firebase/auth";
+import { useAuth } from "../context/AuthContext";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Footer from "../components/Footer";
 import loginBg from "../assets/Login Page.png";
 import fashion from "../assets/Fashion 2.png";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
-
+import { FcGoogle } from "react-icons/fc";
 
 function SignIn() {
   const { authUser, userSignOut } = useAuth();
@@ -26,32 +30,63 @@ function SignIn() {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         toast.success("Sign in successful!");
-        
+
         setTimeout(() => {
           navigate("/product_list");
         }, 1500);
         // console.log(userCredentials);
       })
       .catch((error) => {
-        if (error.code === 'auth/invalid-credential') {
-          toast.error("Incorrect password or email. Please try again.");
-        } else if (error.code === 'auth/network-request-failed') {
-          toast.error("Network error. Please check your connection and try again.");
-        }  else if (error.code === 'auth/user-not-found') {
-          toast.error("No user found with this email. Please sign up.");
-        }  
-        else {
-          toast.error("An error occurred. Please try again.");
-        }
-        // console.log(error);
+        handleError(error);
       });
   };
-  
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  console.log(authUser)
+  const [value, setValue] = useState("");
+  console.log(authUser);
 
+  const handleError = (error) => {
+    if (error.code === "auth/invalid-credential") {
+      toast.error("Incorrect password or email. Please try again.");
+    } else if (error.code === "auth/network-request-failed") {
+      toast.error("Network error. Please check your connection and try again.");
+    } else if (error.code === "auth/user-not-found") {
+      toast.error("No user found with this email. Please sign up.");
+    } else {
+      toast.error("An error occurred. Please try again.");
+    }
+  };
+
+  const handleGoogleSignIn = () => {
+    // if (!email) {
+    //   toast.error("Please enter your email to continue with Google sign-in.");
+    //   return;
+    // }
+
+    // fetchSignInMethodsForEmail(auth, email).then((methods) => {
+    //   if (methods.includes("google.com")) {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        setValue(result.user.email);
+        localStorage.setItem("email", result.user.email);
+        navigate("/product_list");
+      })
+      .catch((error) => handleError(error));
+    // } else {
+    //   toast.error(
+    //     "This email is not associated with Google sign-in. Please use your email and password to sign in."
+    //   );
+    // }
+    // }).catch((error) => handleError(error));
+  };
+
+  useEffect(() => {
+    const storedEmail = localStorage.getItem("email");
+    if (storedEmail) {
+      setValue(storedEmail);
+    }
+  }, []);
 
   return (
     <div
@@ -118,9 +153,17 @@ function SignIn() {
             </button>
             <p className="text-center mt-6 text-xl">
               New to Bandage?{" "}
-              <Link to="/register" className="text-blue-800 font-bold"> Create an account </Link>
+              <Link to="/register" className="text-blue-800 font-bold">
+                {" "}
+                Create an account{" "}
+              </Link>
             </p>
+            <button className="mt-4 items-center justify-center md:text-xl rounded-full border-2 border-red-500 flex mb-10 h-[60px] mx-auto w-full text-blue-700" onClick={handleGoogleSignIn}>
+            <FcGoogle size={30} className="md:mr-5 mr-2 flex" />
+            Sign in with Google
+          </button>
           </form>
+         
         </div>
       </div>
 
